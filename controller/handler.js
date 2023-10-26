@@ -26,11 +26,11 @@ const getOne = async (req, res) => {
 const getAll = async (req, res) => {
     try {
         const data = await schema.find()
-        if(data.length!=0){
+        if (data.length != 0) {
             console.log('Data retrieved successfully!');
             res.json(data)
         }
-        else{
+        else {
             console.log('DB empty! No data found at the moment!');
             res.send('DB empty!')
             return
@@ -45,18 +45,18 @@ const getAll = async (req, res) => {
 //POST request
 const putOne = async (req, res) => {
     try {
-        const {test_id, test_name} = req.body
-        if(!test_id || !test_name){
+        const { test_id, test_name } = req.body
+        if (!test_id || !test_name) {
             console.log('Insufficient or Incorrect data to Enter!')
             res.send('Insufficient or Incorrect data to Enter!')
         }
-        else{
-            if(await schema.findOne({test_id: test_id})){
+        else {
+            if (await schema.findOne({ test_id: test_id })) {
                 console.log('Userid taken already!');
                 res.send('Userid taken already!')
                 return
             }
-            else{
+            else {
                 const data = await schema.create({
                     test_id, test_name
                 })
@@ -77,12 +77,12 @@ const putOne = async (req, res) => {
 //PATCH request
 const updateOne = async (req, res) => {
     try {
-        if(await schema.findOne({test_id: req.params.id})){
-            const data = await schema.findOneAndUpdate({test_id: req.params.id}, req.body, {new:true})
+        if (await schema.findOne({ test_id: req.params.id })) {
+            const data = await schema.findOneAndUpdate({ test_id: req.params.id }, req.body, { new: true })
             console.log('Data updated successfully!')
             res.json(data)
         }
-        else{
+        else {
             console.log('Check the userid! User not found!')
             res.send('User not found!')
             return
@@ -96,7 +96,20 @@ const updateOne = async (req, res) => {
 //Method: deleteMany()
 //DELETE request
 const delOne = async (req, res) => {
-
+    try {
+        if (await schema.findOne({ test_id: req.params.id })) {
+            const data = await schema.deleteMany({test_id: req.params.id})
+            console.log('User Data deleted Successfully!', data)
+            res.send('User Data deleted Successfully!')
+        }
+        else {
+            console.log('Check the userid! User not found!')
+            res.send('User not found!')
+            return
+        }
+    } catch (err) {
+        console.log('Error:\n', err)
+    }
 }
 
 module.exports = { getOne, getAll, putOne, updateOne, delOne }
