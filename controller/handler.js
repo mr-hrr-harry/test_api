@@ -23,7 +23,19 @@ const getOne = async (req, res) => {
 //Method: find()
 //GET request
 const getAll = async (req, res) => {
-    
+    try {
+        const data = await schema.find()
+        if(data.length!=0){
+            console.log('Data retrieved successfully!');
+            res.json(data)
+        }
+        else{
+            console.log('DB empty! No data found at the moment!');
+            res.send('DB empty!')
+        }
+    } catch (err) {
+        console.log('Error:\n', err)
+    }
 }
 
 //store one user data
