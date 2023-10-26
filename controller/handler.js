@@ -13,6 +13,7 @@ const getOne = async (req, res) => {
         else {
             console.log('Check the userid! User not found!')
             res.send('User not found!')
+            return
         }
     } catch (err) {
         console.log('Error:\n', err)
@@ -32,6 +33,7 @@ const getAll = async (req, res) => {
         else{
             console.log('DB empty! No data found at the moment!');
             res.send('DB empty!')
+            return
         }
     } catch (err) {
         console.log('Error:\n', err)
@@ -74,7 +76,20 @@ const putOne = async (req, res) => {
 //Method: findOneAndUpdate()
 //PATCH request
 const updateOne = async (req, res) => {
-
+    try {
+        if(await schema.findOne({test_id: req.params.id})){
+            const data = await schema.findOneAndUpdate({test_id: req.params.id}, req.body, {new:true})
+            console.log('Data updated successfully!')
+            res.json(data)
+        }
+        else{
+            console.log('Check the userid! User not found!')
+            res.send('User not found!')
+            return
+        }
+    } catch (err) {
+        console.log('Error:\n', err)
+    }
 }
 
 //delete one user data
