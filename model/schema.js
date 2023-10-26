@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const test_data = mongoose.Schema({
-    testId:{
+    test_id:{
         type: String,
         required:true,
         unique:true,

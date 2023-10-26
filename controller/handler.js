@@ -42,7 +42,32 @@ const getAll = async (req, res) => {
 //Method: create(), validate(), save()
 //POST request
 const putOne = async (req, res) => {
+    try {
+        const {test_id, test_name} = req.body
+        if(!test_id || !test_name){
+            console.log('Insufficient or Incorrect data to Enter!')
+            res.send('Insufficient or Incorrect data to Enter!')
+        }
+        else{
+            if(await schema.findOne({test_id: test_id})){
+                console.log('Userid taken already!');
+                res.send('Userid taken already!')
+                return
+            }
+            else{
+                const data = await schema.create({
+                    test_id, test_name
+                })
+                await data.validate()
+                const saved = await data.save()
 
+                console.log('Data inserted!');
+                res.json(saved)
+            }
+        }
+    } catch (err) {
+        console.log('Error:\n', err)
+    }
 }
 
 //update one user data
